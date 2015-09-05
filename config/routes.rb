@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :recipes do
     member do
       post 'like'
+      post 'review'
     end
   end
   

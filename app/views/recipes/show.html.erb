@@ -1,3 +1,4 @@
+<%= render 'shared/errors', obj: @review %>
 <%= render "shared/page_title", title: @recipe.name %>
 
   <div class="row">
@@ -9,7 +10,7 @@
       <% if logged_in? and (@recipe.chef == current_user || current_user.admin?) %>
         <%= link_to "Edit this Recipe", edit_recipe_path(@recipe), class: "btn btn-success pull-right" %>
       <% end %>
-      <% if current_user.admin? %>
+      <% if logged_in? and current_user.admin? %>
         <%= link_to "[Delete Recipe]", @recipe, method: :delete, data: {confirm: "Are you sure?" } %>
       <% end %>
       <h3><%= @recipe.summary %></h3>
@@ -38,5 +39,31 @@
       </div>
     </div>    
   </div>
-
+  <% if logged_in? %>
+    <div class="row">
+      <div class="col-md-8">
+        <h3>Leave a review</h3>
+        <div class="well">
+          <%= form_for(@review, url: review_recipe_path(@recipe)) do |f| %>
+            <%= f.text_field :content %>
+            <%= f.submit("Submit a review", class:"btn btn-success") %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <% @reviews.each do |review| %>
+    <div class="row">
+      <div class="col-md-8 well">
+        <p><%= review.content %></p>
+        <p>
+          <span class="quiet"><small> Created: <%= time_ago_in_words(review.created_at) %> ago </small></span>
+        </p>
+        <p>
+          <span class="quiet"><small> Reviewed by: <%= link_to review.chef.chefname, chef_path(review.chef) %></small></span>
+        </p>  
+      </div>
+    </div>
+  <% end %>  
+  <%= will_paginate @reviews %> 
 <h5><%= link_to "Return to Recipe Listings", recipes_path, class: "btn btn-warning btn-small" %></h5>

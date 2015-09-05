@@ -35,3 +35,20 @@
     </div>
   </div>
 <% end %>
+
+<% if logged_in? and @chef == current_user %>
+  <div class="row">
+    <div class="col-md-4 col-md-offset-4 center">
+      <h3><em>Reviews</em></h3>
+    </div>
+  </div>  
+  <% @reviews.each do |review| %>
+    <div class="row">
+      <div class="col-lg-6 well col-lg-offset-3">
+        <h4>Recipe: <%= link_to review.recipe.name, recipe_path(review.recipe) %></h4>
+        <h4>Review:<h4>
+        <p><small><%= review.content %></small></p>
+      </div>
+    </div>
+  <% end %>
+<% end %>
